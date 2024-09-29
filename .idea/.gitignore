@@ -1,0 +1,11 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Игнорируем настройки IntelliJ IDEA
+.idea/
+
+# Игнорируем скомпилированные файлы и папку build
+build/
+
+# Игнорируем временные файлы и логи
+*.log

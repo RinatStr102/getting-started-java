@@ -7,7 +7,13 @@ import static com.codeborne.selenide.Selenide.open;
 public class SearchTests {
     @Test
     void successfulSearchTest() {
+
+
         open("https://www.google.com/");
+        if ($("[id=L2AGLb]").exists()) {
+            $("[id=L2AGLb]").click();
+        }
+
         $("[name=q]").setValue("selenide").pressEnter();
         $("[id=search]").shouldHave(text("https://selenide.org"));
     }
