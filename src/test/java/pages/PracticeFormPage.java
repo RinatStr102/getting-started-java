@@ -1,6 +1,7 @@
 package pages;
 
 import com.codeborne.selenide.SelenideElement;
+import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 
 public class PracticeFormPage {
@@ -9,9 +10,9 @@ public class PracticeFormPage {
     private SelenideElement lastNameInput = $("#lastName");
     private SelenideElement emailInput = $("#userEmail");
     private SelenideElement genderRadioButton = $("label[for='gender-radio-3']");
-    private SelenideElement userButtonInput = $("9112233444");
+    private SelenideElement userButtonInput = $("#userNumber");
     private SelenideElement dateOfBirthInput = $("#dateOfBirthInput");
-    private SelenideElement subjectsInput = $("#subjectsContainer");
+    private SelenideElement subjectsInput = $("#subjectsInput");
     private SelenideElement hobbiesCheckbox = $("label[for='hobbies-checkbox-2']");
     private SelenideElement uploadPicture = $("#uploadPicture");
     private SelenideElement currentAddressInput = $("#currentAddress");
@@ -20,7 +21,7 @@ public class PracticeFormPage {
     private SelenideElement submitButton = $("#submit");
 
     public PracticeFormPage setFirstName(String firstName) {
-        firstNameInput.setValue("firstName");
+        firstNameInput.setValue(firstName);
         return this;
     }
 
@@ -40,7 +41,7 @@ public class PracticeFormPage {
     }
 
     public PracticeFormPage setUserNumber(String userNumber) {
-        userButtonInput.setValue("userNumber");
+        userButtonInput.setValue(userNumber);
         return this;
     }
 
@@ -72,5 +73,20 @@ public class PracticeFormPage {
         return this;
     }
 
+    public PracticeFormPage selectState(String state) {
+        stateDropdown.click();
+        $("#stateCity-wrapper").$(byText(state)).click();
+        return this;
+    }
 
+    public PracticeFormPage selectCity(String city) {
+        cityDropdown.click();
+        $("#stateCity-wrapper").$(byText(city)).click();
+        return this;
+    }
+
+    public PracticeFormPage submitForm() {
+        submitButton.click();
+        return this;
+    }
 }
