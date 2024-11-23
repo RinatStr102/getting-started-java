@@ -1,22 +1,32 @@
 plugins {
-    id 'java-library'
+    id 'java-library' // Подключаем плагин для работы с Java
+    id 'io.qameta.allure' version '2.12.0' // Плагин для интеграции с Allure
 }
 
 repositories {
-    mavenCentral()
+    mavenCentral() // Основной репозиторий для зависимостей
 }
 
 dependencies {
     testImplementation (
-            "com.codeborne:selenide:6.19.1",
-            "org.junit.jupiter:junit-jupiter:5.9.3",
-            'com.github.javafaker:javafaker:1.0.2')
+            "com.codeborne:selenide:6.19.1", // Библиотека для тестирования UI
+            "org.junit.jupiter:junit-jupiter:5.9.3", // Фреймворк для тестов
+            "com.github.javafaker:javafaker:1.0.2", // Генерация тестовых данных
+            "io.qameta.allure:allure-selenide:2.21.0" // Интеграция Selenide с Allure
+    )
 }
 
 tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
+    options.encoding = 'UTF-8' // Кодировка для работы с русскими символами
 }
 
 test {
-    useJUnitPlatform()
+    useJUnitPlatform() // Используем JUnit 5
+    systemProperty 'allure.results.directory', 'build/allure-results' // Указываем папку для результатов Allure
+}
+
+// Задача для генерации Allure-отчета в HTML
+tasks.register('generateAllureReport', Exec) {
+    dependsOn test
+    commandLine 'allure', 'generate', 'build/allure-results', '-o', 'build/allure-report', '--clean'
 }
