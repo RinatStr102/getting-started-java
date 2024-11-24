@@ -1,7 +1,11 @@
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.WebDriverRunner;
 import com.github.javafaker.Faker;
+import io.qameta.allure.Attachment;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.OutputType;
 import pages.PracticeFormPage;
 
 import static com.codeborne.selenide.Condition.appear;
@@ -54,5 +58,25 @@ public class TestForm {
         $(".modal-dialog").should(appear);
         $("#example-modal-sizes-title-lg").shouldHave(text("Thanks for submitting the form"));
         $(".table-responsive").shouldHave(text(firstName), text(lastName), text(email), text(userNumber));
+
+        attachScreenshot();
+        attachPageSource();
+        attachConsoleLogs();
+    }
+
+    // Аттачи для Allure
+    @Attachment(value = "Screenshot", type = "image/png")
+    public byte[] attachScreenshot() {
+        return Selenide.screenshot(OutputType.BYTES);
+    }
+
+    @Attachment(value = "Page Source", type = "text/html")
+    public String attachPageSource() {
+        return WebDriverRunner.getWebDriver().getPageSource();
+    }
+
+    @Attachment(value = "Console Logs", type = "text/plain")
+    public String attachConsoleLogs() {
+        return String.join("\n", Selenide.getWebDriverLogs("browser"));
     }
 }

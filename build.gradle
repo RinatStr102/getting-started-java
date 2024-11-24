@@ -9,7 +9,7 @@ repositories {
 
 dependencies {
     testImplementation (
-            "com.codeborne:selenide:6.19.1", // Библиотека для тестирования UI
+            "com.codeborne:selenide:6.19.0", // Библиотека для тестирования UI
             "org.junit.jupiter:junit-jupiter:5.9.3", // Фреймворк для тестов
             "com.github.javafaker:javafaker:1.0.2", // Генерация тестовых данных
             "io.qameta.allure:allure-selenide:2.21.0" // Интеграция Selenide с Allure
