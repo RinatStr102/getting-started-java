@@ -11,8 +11,7 @@ import pages.PracticeFormPage;
 import static com.codeborne.selenide.Condition.appear;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selenide.*;
 
 public class TestForm {
 
@@ -31,7 +30,7 @@ public class TestForm {
 
     @BeforeAll
     static void beforeAll() {
-        Configuration.browser = "firefox";
+       // Configuration.browser = "firefox";
         Configuration.baseUrl = "https://demoqa.com";
         Configuration.browserSize = "1420x920";
         //Configuration.holdBrowserOpen = true;
@@ -40,6 +39,8 @@ public class TestForm {
     @Test
     void successForm() {
         open("/automation-practice-form");
+        // Удаляем мешающие iframe через JavaScript
+        removeIframe();
         practiceFormPage
                 .setFirstName(firstName)
                 .setLastName(lastName)
@@ -62,6 +63,9 @@ public class TestForm {
         attachScreenshot();
         attachPageSource();
         attachConsoleLogs();
+    }
+    private void removeIframe() {
+        executeJavaScript("document.querySelectorAll('iframe').forEach(iframe => iframe.remove());");
     }
 
     // Аттачи для Allure
