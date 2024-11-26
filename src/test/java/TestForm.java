@@ -1,14 +1,17 @@
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.WebDriverRunner;
 import com.github.javafaker.Faker;
+import io.qameta.allure.Attachment;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.OutputType;
 import pages.PracticeFormPage;
 
 import static com.codeborne.selenide.Condition.appear;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selenide.*;
 
 public class TestForm {
 
@@ -27,7 +30,7 @@ public class TestForm {
 
     @BeforeAll
     static void beforeAll() {
-        Configuration.browser = "firefox";
+       // Configuration.browser = "firefox";
         Configuration.baseUrl = "https://demoqa.com";
         Configuration.browserSize = "1420x920";
         //Configuration.holdBrowserOpen = true;
@@ -36,6 +39,8 @@ public class TestForm {
     @Test
     void successForm() {
         open("/automation-practice-form");
+        // Удаляем мешающие iframe через JavaScript
+        removeIframe();
         practiceFormPage
                 .setFirstName(firstName)
                 .setLastName(lastName)
@@ -54,5 +59,28 @@ public class TestForm {
         $(".modal-dialog").should(appear);
         $("#example-modal-sizes-title-lg").shouldHave(text("Thanks for submitting the form"));
         $(".table-responsive").shouldHave(text(firstName), text(lastName), text(email), text(userNumber));
+
+        attachScreenshot();
+        attachPageSource();
+        attachConsoleLogs();
+    }
+    private void removeIframe() {
+        executeJavaScript("document.querySelectorAll('iframe').forEach(iframe => iframe.remove());");
+    }
+
+    // Аттачи для Allure
+    @Attachment(value = "Screenshot", type = "image/png")
+    public byte[] attachScreenshot() {
+        return Selenide.screenshot(OutputType.BYTES);
+    }
+
+    @Attachment(value = "Page Source", type = "text/html")
+    public String attachPageSource() {
+        return WebDriverRunner.getWebDriver().getPageSource();
+    }
+
+    @Attachment(value = "Console Logs", type = "text/plain")
+    public String attachConsoleLogs() {
+        return String.join("\n", Selenide.getWebDriverLogs("browser"));
     }
 }
